@@ -194,8 +194,34 @@ async function generateCache() {
     const wishlists = [];
 
     for (const issue of issues) {
-      // Parse the issue body
-      const parsed = parseIssueForm(issue.body || '');
+      // Check if this is an approved wishlist (has 'approved-wishlist' label)
+      const isApproved = issue.labels?.some((label) => label.name === 'approved-wishlist');
+      
+      // Fetch comments to get the most recent form data (comments are source of truth for updates)
+      let sourceBody = issue.body || '';
+      let sourceUpdatedAt = issue.updated_at;
+      
+      try {
+        const comments = await octokit.paginate('GET /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+          owner: 'oss-wishlist',
+          repo: 'wishlists',
+          issue_number: issue.number,
+          per_page: 100,
+        });
+
+        // Get the most recent comment (comments are the source of truth for updates)
+        if (comments.length > 0) {
+          const mostRecentComment = comments[comments.length - 1];
+          sourceBody = mostRecentComment.body || sourceBody;
+          sourceUpdatedAt = mostRecentComment.updated_at || sourceUpdatedAt;
+        }
+      } catch (commentError) {
+        console.warn(`⚠️ Could not fetch comments for issue #${issue.number}:`, commentError.message);
+        // Fall back to using issue body if comment fetch fails
+      }
+
+      // Parse the form data (from most recent comment or issue body)
+      const parsed = parseIssueForm(sourceBody);
       
       const maintainerAvatarUrl = parsed.maintainer 
         ? `https://github.com/${parsed.maintainer}.png`
@@ -208,9 +234,10 @@ async function generateCache() {
         wishlistUrl: `/wishlist/${issue.number}`,
         maintainerUsername: parsed.maintainer,
         maintainerAvatarUrl: maintainerAvatarUrl,
+        approved: isApproved,
         status: issue.state === 'open' ? 'Open' : 'Closed',
         created_at: issue.created_at,
-        updated_at: issue.updated_at,
+        updated_at: sourceUpdatedAt,
         wishes: parsed.services || [],
         urgency: parsed.urgency,
         projectSize: parsed.projectSize,
