@@ -39,16 +39,21 @@ jobs:
         run: |
           node scripts/generate-cache.mjs
       
-      - name: Check if cache changed
+      - name: Check if cache was generated and changed
         id: cache_check
         run: |
-          if git diff --quiet all-wishlists.json 2>/dev/null; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "✓ Cache unchanged"
+          if [ -f all-wishlists.json ]; then
+            echo "Cache file exists"
+            if git diff --quiet all-wishlists.json 2>/dev/null; then
+              echo "changed=false" >> $GITHUB_OUTPUT
+              echo "ℹ️ Cache file exists but no git changes detected"
+            else
+              echo "changed=true" >> $GITHUB_OUTPUT
+              echo "✓ Cache has git changes"
+            fi
           else
-            echo "changed=true" >> $GITHUB_OUTPUT
-            echo "✓ Cache updated"
-            git diff --stat all-wishlists.json || true
+            echo "⚠️ Cache file not found!"
+            echo "changed=false" >> $GITHUB_OUTPUT
           fi
       
       - name: Commit and push cache update
@@ -72,3 +77,12 @@ jobs:
           
           git commit -m "${COMMIT_MSG}"
           git push
+      
+      - name: Force add and commit if no changes detected
+        if: steps.cache_check.outputs.changed == 'false' && hashFiles('all-wishlists.json') != ''
+        run: |
+          git config user.name "oss-wishlist-bot"
+          git config user.email "bot@oss-wishlist.dev"
+          git add -f all-wishlists.json
+          git commit -m "chore: update wishlist cache (force commit)" || true
+          git push || true
