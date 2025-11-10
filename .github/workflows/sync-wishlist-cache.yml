@@ -1,0 +1,74 @@
+name: Sync Wishlist Cache
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - deleted
+      - reopened
+  issue_comment:
+    types:
+      - created
+      - edited
+      - deleted
+  workflow_dispatch:
+
+jobs:
+  sync-cache:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install @octokit/rest
+      
+      - name: Fetch wishlist data from GitHub API
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/generate-cache.mjs
+      
+      - name: Check if cache changed
+        id: cache_check
+        run: |
+          if git diff --quiet all-wishlists.json 2>/dev/null; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "✓ Cache unchanged"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✓ Cache updated"
+            git diff --stat all-wishlists.json || true
+          fi
+      
+      - name: Commit and push cache update
+        if: steps.cache_check.outputs.changed == 'true'
+        run: |
+          git config user.name "oss-wishlist-bot"
+          git config user.email "bot@oss-wishlist.dev"
+          git add all-wishlists.json
+          
+          if [ "${{ github.event_name }}" == "issues" ]; then
+            ISSUE_NUM="${{ github.event.issue.number }}"
+            ISSUE_ACTION="${{ github.event.action }}"
+            COMMIT_MSG="chore: update wishlist cache from issue #${ISSUE_NUM} (${ISSUE_ACTION})"
+          elif [ "${{ github.event_name }}" == "issue_comment" ]; then
+            ISSUE_NUM="${{ github.event.issue.number }}"
+            COMMENT_ACTION="${{ github.event.action }}"
+            COMMIT_MSG="chore: update wishlist cache from comment on issue #${ISSUE_NUM} (${COMMENT_ACTION})"
+          else
+            COMMIT_MSG="chore: update wishlist cache (manual trigger)"
+          fi
+          
+          git commit -m "${COMMIT_MSG}"
+          git push
