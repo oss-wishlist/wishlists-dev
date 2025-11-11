@@ -1,280 +1,144 @@
-import { Octokit } from '@octokit/rest';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+#!/usr/bin/env node
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { Octokit } from "@octokit/rest";
+import fs from "fs";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
-// Parse GitHub issue form responses
-function parseIssueForm(body) {
-  const result = {
-    project: '',
-    maintainer: '',
-    repository: '',
-    urgency: 'medium',
-    services: [],
-    resources: [],
-    wantsFundingYml: false,
-    openToSponsorship: false,
+function extractSection(body, sectionHeader) {
+  const regex = new RegExp(
+    `### ${sectionHeader}\n([\\s\\S]*?)(?=###|$)`,
+    "i"
+  );
+  const match = body.match(regex);
+  if (!match) return "";
+  return match[1].trim();
+}
+
+function parseCheckboxes(content) {
+  const lines = content.split("\n");
+  return lines
+    .filter((line) => line.includes("[x]"))
+    .map((line) => {
+      const match = line.match(/\[x\]\s*(.+?)(?:\s*-|$)/);
+      return match ? match[1].trim() : "";
+    })
+    .filter((item) => item.length > 0);
+}
+
+function parseCommaSeparated(content) {
+  return content
+    .split(",")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+}
+
+function parseWishlistIssue(issue, labels) {
+  const isApproved = labels.some((label) => label.name === "approved-wishlist");
+  const body = issue.body || "";
+
+  const projectName = extractSection(body, "Project Name").trim();
+  const maintainerUsername = extractSection(body, "Maintainer GitHub Username")
+    .trim()
+    .replace(/^@/, "");
+  const repositoryUrl = extractSection(body, "Project Repository").trim();
+  const ecosystemsText = extractSection(body, "Package Ecosystems");
+  const technologies = parseCommaSeparated(ecosystemsText);
+  const servicesText = extractSection(body, "Services Requested");
+  const wishes = parseCheckboxes(servicesText);
+  const resourcesText = extractSection(body, "Resources Requested");
+  const resources = parseCheckboxes(resourcesText);
+  const urgencyText = extractSection(body, "Urgency Level");
+  const projectSize = extractSection(body, "Project Size").trim();
+  const additionalNotes = extractSection(body, "Additional Notes").trim();
+  const additionalContext = extractSection(body, "Additional Context").trim();
+
+  const urgencyMatch = urgencyText.match(/^\s*(.+?)(?:\s*-|$)/m);
+  const urgency = urgencyMatch ? urgencyMatch[1].trim() : "";
+
+  return {
+    id: issue.number,
+    projectName: projectName || `Wishlist: ${issue.title}`,
+    repositoryUrl,
+    maintainerUsername,
+    maintainerAvatarUrl: maintainerUsername
+      ? `https://github.com/${maintainerUsername}.png`
+      : "",
+    approved: isApproved,
+    wishes,
+    technologies,
+    resources,
+    urgency,
+    projectSize,
+    additionalNotes,
+    additionalContext,
+    status: isApproved ? "approved" : "pending",
+    createdAt: issue.created_at,
+    updatedAt: issue.updated_at,
   };
-
-  // Parse Package Ecosystems section
-  const packageEcosystemsSection = body.split('### Package Ecosystems')?.[1]?.split('###')?.[0]?.trim();
-  
-  if (packageEcosystemsSection) {
-    const techs = packageEcosystemsSection
-      .split('\n')
-      .map(line => line.replace(/^-\s*/, '').trim())
-      .filter(line => line && line !== '_No response_')
-      .map(line => line.split(',').map(t => t.trim()))
-      .flat()
-      .filter(Boolean);
-    if (techs.length) {
-      result.technologies = techs;
-    }
-  }
-
-  const sections = body.split('###').map(s => s.trim()).filter(Boolean);
-
-  for (const section of sections) {
-    const lines = section.split('\n');
-    const header = lines[0].trim();
-    const content = lines.slice(1).join('\n').trim();
-
-    switch (header) {
-      case 'Project Name':
-        result.project = content.replace('_No response_', '').trim();
-        break;
-      
-      case 'Maintainer GitHub Username':
-        result.maintainer = content.replace('_No response_', '').replace('@', '').trim();
-        break;
-      
-      case 'Project Repository':
-        result.repository = content.replace('_No response_', '').trim();
-        break;
-      
-      case 'Urgency Level':
-        const urgencyMap = {
-          'Low - Planning for future': 'low',
-          'Medium - Needed within months': 'medium',
-          'High - Needed within weeks': 'high',
-          'Critical - Needed immediately': 'critical'
-        };
-        result.urgency = urgencyMap[content] || 'medium';
-        break;
-
-      case 'Project Size':
-        {
-          const size = content.replace('_No response_', '').trim().toLowerCase();
-          if (['small', 'medium', 'large'].includes(size)) {
-            result.projectSize = size;
-          }
-        }
-        break;
-      
-      case 'Services Requested':
-        {
-          const serviceLines = content.split('\n');
-          for (const line of serviceLines) {
-            if (line.includes('- [x] ') || line.includes('- [X] ')) {
-              const service = line.replace(/- \[[xX]\] /, '').trim();
-              if (service && service !== '_No response_') {
-                result.services.push(service);
-              }
-            }
-          }
-        }
-        break;
-      
-      case 'Resources Requested':
-        {
-          const resourceLines = content.split('\n');
-          for (const line of resourceLines) {
-            if (line.includes('- [x] ') || line.includes('- [X] ')) {
-              const resource = line.replace(/- \[[xX]\] /, '').trim();
-              if (resource && resource !== '_No response_') {
-                result.resources.push(resource);
-              }
-            }
-          }
-        }
-        break;
-      
-      case 'Additional Context':
-        if (content !== '_No response_') {
-          result.additionalContext = content;
-        }
-        break;
-      
-      case 'FUNDING.yml Setup':
-        result.wantsFundingYml = content.includes('- [x]') || content.includes('- [X]');
-        break;
-      
-      case 'Open to Sponsorship':
-      case 'Open to Honorarium':
-        result.openToSponsorship = content.toLowerCase().includes('yes');
-        break;
-      
-      case 'Timeline':
-        if (content !== '_No response_') {
-          result.timeline = content;
-        }
-        break;
-      
-      case 'Organization Type':
-        {
-          const type = content.replace('_No response_', '').trim().toLowerCase();
-          if (['single-maintainer', 'community-team', 'company-team', 'foundation-team', 'other'].includes(type)) {
-            result.organizationType = type;
-          }
-        }
-        break;
-      
-      case 'Organization Name':
-        if (content !== '_No response_') {
-          result.organizationName = content;
-        }
-        break;
-      
-      case 'Additional Notes':
-        if (content !== '_No response_') {
-          result.additionalNotes = content;
-        }
-        break;
-      
-      case 'Preferred Practitioner':
-        if (content !== '_No response_') {
-          result.preferredPractitioner = content;
-        }
-        break;
-      
-      case 'Practitioner Name':
-        if (content !== '_No response_') {
-          result.nomineeName = content;
-        }
-        break;
-      
-      case 'Practitioner Email':
-        if (content !== '_No response_') {
-          result.nomineeEmail = content;
-        }
-        break;
-      
-      case 'Practitioner GitHub':
-        if (content !== '_No response_') {
-          result.nomineeGithub = content;
-        }
-        break;
-    }
-  }
-
-  return result;
 }
 
 async function generateCache() {
-  console.log('🔄 Fetching wishlists from GitHub Issues...');
-  
   try {
-    // Fetch all open issues from this repo
-    const issues = await octokit.paginate('GET /repos/{owner}/{repo}/issues', {
-      owner: 'oss-wishlist',
-      repo: 'wishlists',
-      state: 'open',
+    console.log("📋 Fetching wishlists from GitHub...");
+
+    const issues = await octokit.paginate("GET /repos/{owner}/{repo}/issues", {
+      owner: "oss-wishlist",
+      repo: "wishlists",
+      state: "all",
       per_page: 100,
     });
 
-    console.log(`📦 Found ${issues.length} open wishlists`);
+    console.log(`✓ Found ${issues.length} issues`);
 
-    const wishlists = [];
+    const wishlists = issues
+      .filter((issue) => !issue.pull_request)
+      .map((issue) => parseWishlistIssue(issue, issue.labels));
 
-    for (const issue of issues) {
-      // Check if this is an approved wishlist (has 'approved-wishlist' label)
-      const isApproved = issue.labels?.some((label) => label.name === 'approved-wishlist');
-      
-      // Fetch comments to get the most recent form data (comments are source of truth for updates)
-      let sourceBody = issue.body || '';
-      let sourceUpdatedAt = issue.updated_at;
-      
-      try {
-        const comments = await octokit.paginate('GET /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-          owner: 'oss-wishlist',
-          repo: 'wishlists',
-          issue_number: issue.number,
-          per_page: 100,
-        });
+    console.log(`✓ Parsed ${wishlists.length} wishlists`);
 
-        // Get the most recent comment (comments are the source of truth for updates)
-        if (comments.length > 0) {
-          const mostRecentComment = comments[comments.length - 1];
-          sourceBody = mostRecentComment.body || sourceBody;
-          sourceUpdatedAt = mostRecentComment.updated_at || sourceUpdatedAt;
-        }
-      } catch (commentError) {
-        console.warn(`⚠️ Could not fetch comments for issue #${issue.number}:`, commentError.message);
-        // Fall back to using issue body if comment fetch fails
-      }
+    const approvedCount = wishlists.filter((w) => w.approved).length;
+    const allTechnologies = [
+      ...new Set(wishlists.flatMap((w) => w.technologies)),
+    ].sort();
+    const allServices = [...new Set(wishlists.flatMap((w) => w.wishes))].sort();
 
-      // Parse the form data (from most recent comment or issue body)
-      const parsed = parseIssueForm(sourceBody);
-      
-      const maintainerAvatarUrl = parsed.maintainer 
-        ? `https://github.com/${parsed.maintainer}.png`
-        : '';
-
-      const wishlist = {
-        id: issue.number,
-        projectName: parsed.project || issue.title,
-        repositoryUrl: parsed.repository || '',
-        wishlistUrl: `/wishlist/${issue.number}`,
-        maintainerUsername: parsed.maintainer,
-        maintainerAvatarUrl: maintainerAvatarUrl,
-        approved: isApproved,
-        status: issue.state === 'open' ? 'Open' : 'Closed',
-        created_at: issue.created_at,
-        updated_at: sourceUpdatedAt,
-        wishes: parsed.services || [],
-        urgency: parsed.urgency,
-        projectSize: parsed.projectSize,
-        additionalNotes: parsed.additionalContext || '',
-        technologies: parsed.technologies || [],
-        timeline: parsed.timeline,
-        organizationType: parsed.organizationType,
-        organizationName: parsed.organizationName,
-        openToSponsorship: parsed.openToSponsorship,
-        wantsFundingYml: parsed.wantsFundingYml,
-        resources: parsed.resources || [],
-      };
-
-      wishlists.push(wishlist);
-    }
-
-    // Sort by created_at descending (newest first)
-    wishlists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-    const cache = {
-      schema_version: '1.0.0',
-      generated_by: 'OSS Wishlist Sync Action',
-      data_source: 'GitHub Issues (oss-wishlist/wishlists)',
-      wishlists: wishlists,
-      lastUpdated: new Date().toISOString(),
-      count: wishlists.length,
+    const cacheData = {
+      version: "1.0.0",
+      generatedAt: new Date().toISOString(),
+      totalWishlists: wishlists.length,
+      approvedCount,
+      pendingCount: wishlists.length - approvedCount,
+      ecosystemStats: allTechnologies.reduce((acc, tech) => {
+        acc[tech] = wishlists.filter((w) => w.technologies.includes(tech))
+          .length;
+        return acc;
+      }, {}),
+      serviceStats: allServices.reduce((acc, service) => {
+        acc[service] = wishlists.filter((w) => w.wishes.includes(service))
+          .length;
+        return acc;
+      }, {}),
+      wishlists,
     };
 
-    // Write cache to file in repo root
-    const cachePath = `${__dirname}/../all-wishlists.json`;
-    fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2));
-    
-    console.log(`✅ Cache updated: ${wishlists.length} wishlists`);
-    console.log(`📝 Written to: ${cachePath}`);
-    
+    fs.writeFileSync("all-wishlists.json", JSON.stringify(cacheData, null, 2));
+
+    console.log("✓ Cache generated successfully");
+    console.log(
+      `  - ${approvedCount} approved wishlists`
+    );
+    console.log(
+      `  - ${wishlists.length - approvedCount} pending wishlists`
+    );
+    console.log(
+      `  - ${allTechnologies.length} unique technologies`
+    );
+    console.log(`  - ${allServices.length} unique services`);
   } catch (error) {
-    console.error('❌ Error generating cache:', error);
+    console.error("❌ Error generating cache:", error);
     process.exit(1);
   }
 }
