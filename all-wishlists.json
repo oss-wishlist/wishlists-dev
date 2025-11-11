@@ -1,9 +1,9 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T19:08:13.368Z",
+  "generatedAt": "2025-11-11T19:10:11.075Z",
   "totalWishlists": 2,
-  "approvedCount": 0,
-  "pendingCount": 2,
+  "approvedCount": 1,
+  "pendingCount": 1,
   "ecosystemStats": {
     "Go Modules (Go)": 1,
     "Pub (Dart/Flutter)": 1
@@ -21,7 +21,7 @@
       "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
-      "approved": false,
+      "approved": true,
       "wishes": [
         "dependency",
         "developer",
@@ -35,9 +35,9 @@
       "projectSize": "Medium",
       "additionalNotes": "testing one two",
       "additionalContext": "testing one two",
-      "status": "pending",
+      "status": "approved",
       "createdAt": "2025-11-11T17:00:56Z",
-      "updatedAt": "2025-11-11T17:41:40Z"
+      "updatedAt": "2025-11-11T19:09:56Z"
     },
     {
       "id": 47,
