@@ -3,6 +3,40 @@
 import { Octokit } from "@octokit/rest";
 import fs from "fs";
 
+async function getLatestFormData(issue) {
+  try {
+    const comments = await octokit.paginate(
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
+      {
+        owner: "oss-wishlist",
+        repo: "wishlists",
+        issue_number: issue.numberparseWishlistIssue
+        per_page: 1,
+        sort: "created",
+        direction: "desc",
+      }
+    );
+
+    // If there's a recent comment with form data, use it
+    if (comments.length > 0) {
+      const latestComment = comments[0];
+      // Check if comment is recent (within 1 hour of last issue update)
+      const commentTime = new Date(latestComment.created_at);
+      const issueTime = new Date(issue.updated_at);
+      
+      // If comment is within 1 hour of issue update, it's likely the edit
+      if (commentTime.getTime() - issueTime.getTime() < 3600000) {
+        return latestComment.body;
+      }
+    }
+  } catch (error) {
+    // If fetching comments fails, just use the issue body
+    console.warn(`Could not fetch comments for issue #${issue.number}`);
+  }
+
+  return issue.body;
+}
+
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
@@ -35,9 +69,11 @@ function parseCommaSeparated(content) {
     .filter((item) => item.length > 0);
 }
 
-function parseWishlistIssue(issue, labels) {
+async function parseWishlistIssue(issue, labels) {
   const isApproved = labels.some((label) => label.name === "approved-wishlist");
-  const body = issue.body || "";
+  
+  // Get the most recent form data (comment or body)
+  const body = await getLatestFormData(issue);
 
   const projectName = extractSection(body, "Project Name").trim();
   const maintainerUsername = extractSection(body, "Maintainer GitHub Username")
