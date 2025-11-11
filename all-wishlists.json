@@ -1,17 +1,43 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T16:50:05.093Z",
-  "totalWishlists": 1,
+  "generatedAt": "2025-11-11T17:01:14.374Z",
+  "totalWishlists": 2,
   "approvedCount": 0,
-  "pendingCount": 1,
+  "pendingCount": 2,
   "ecosystemStats": {
-    "Pub (Dart/Flutter)": 1
+    "Pub (Dart/Flutter)": 2
   },
   "serviceStats": {
-    "governance": 1,
+    "funding": 1,
+    "governance": 2,
+    "leadership": 1,
     "moderation": 1
   },
   "wishlists": [
+    {
+      "id": 48,
+      "projectName": "Junie 1",
+      "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "leadership",
+        "funding",
+        "governance"
+      ],
+      "technologies": [
+        "Pub (Dart/Flutter)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "testing one two",
+      "additionalContext": "new-repo-1\n\ntesting one two",
+      "status": "pending",
+      "createdAt": "2025-11-11T17:00:56Z",
+      "updatedAt": "2025-11-11T17:00:56Z"
+    },
     {
       "id": 47,
       "projectName": "Testing tuesday",
