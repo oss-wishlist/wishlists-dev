@@ -7,6 +7,9 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
+/**
+ * Extract a specific section from GitHub issue form body
+ */
 function extractSection(body, sectionHeader) {
   const regex = new RegExp(
     `### ${sectionHeader}\n([\\s\\S]*?)(?=###|$)`,
@@ -17,46 +20,63 @@ function extractSection(body, sectionHeader) {
   return match[1].trim();
 }
 
-function parseCheckboxes(content) {
-  const lines = content.split("\n");
-  return lines
-    .filter((line) => line.includes("[x]"))
-    .map((line) => {
-      const match = line.match(/\[x\]\s*(.+?)(?:\s*-|$)/);
-      return match ? match[1].trim() : "";
-    })
-    .filter((item) => item.length > 0);
+/**
+ * Generate wishlist ID from repo name and issue number
+ * Format: repo-name-<issue_number>
+ * Example: new-repo-1-50 (for issue #50)
+ */
+function generateWishlistId(repositoryUrl, issueNumber) {
+  try {
+    // Extract repo name from URL
+    // Handles: https://github.com/owner/repo, github.com/owner/repo, owner/repo
+    const urlMatch = repositoryUrl.match(/github\.com\/[^\/]+\/([^\/\s]+)/i);
+    const slashMatch = repositoryUrl.match(/^([^\/]+)\/([^\/\s]+)$/);
+    
+    let repoName = '';
+    if (urlMatch) {
+      repoName = urlMatch[1];
+    } else if (slashMatch) {
+      repoName = slashMatch[2];
+    } else {
+      // Fallback: use issue number only
+      return `wishlist-${issueNumber}`;
+    }
+    
+    // Clean repo name: lowercase, replace special chars with hyphens
+    repoName = repoName
+      .toLowerCase()
+      .replace(/\.git$/, '') // Remove .git suffix
+      .replace(/[^a-z0-9-]/g, '-') // Replace special chars
+      .replace(/-+/g, '-') // Collapse multiple hyphens
+      .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+    
+    return `${repoName}-${issueNumber}`;
+  } catch (error) {
+    console.warn(`Error generating ID for issue ${issueNumber}:`, error.message);
+    return `wishlist-${issueNumber}`;
+  }
 }
 
-function parseCommaSeparated(content) {
-  return content
-    .split(",")
-    .map((item) => item.trim())
-    .filter((item) => item.length > 0);
-}
-
+/**
+ * Get the latest form data from bot comments or issue body
+ */
 async function getLatestFormData(issue) {
   try {
     // Fetch all comments for this issue
-    let allComments = [];
-    let page = 1;
-    const perPage = 100;
-
-    while (true) {
-      const response = await octokit.paginate.iterator(
-        "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
-        {
-          owner: "oss-wishlist",
-          repo: "wishlists",
-          issue_number: issue.number,
-          per_page: perPage,
-        }
-      );
-
-      for await (const { data } of response) {
-        allComments = allComments.concat(data);
+    const allComments = [];
+    
+    const iterator = octokit.paginate.iterator(
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
+      {
+        owner: "oss-wishlist",
+        repo: "wishlists",
+        issue_number: issue.number,
+        per_page: 100,
       }
-      break;
+    );
+
+    for await (const { data } of iterator) {
+      allComments.push(...data);
     }
 
     // Filter for bot comments only
@@ -84,117 +104,176 @@ async function getLatestFormData(issue) {
   }
 }
 
+/**
+ * Extract fulfillment URL from issue body
+ * Format: "Fulfill this wishlist: {URL}"
+ */
+function extractFulfillmentUrl(body, issueNumber) {
+  // Look for the fulfillment URL in the body
+  const urlMatch = body.match(/Fulfill this wishlist:\s*(https?:\/\/[^\s]+)/i);
+  
+  if (urlMatch) {
+    return urlMatch[1].trim();
+  }
+  
+  // Fallback: construct URL from issue number
+  return `https://oss-wishlist.com/fulfill?issue=${issueNumber}`;
+}
+
+/**
+ * Get the most recent update timestamp from bot comments
+ */
+async function getLatestUpdateTimestamp(issue) {
+  try {
+    // Fetch all comments for this issue
+    const allComments = [];
+    
+    const iterator = octokit.paginate.iterator(
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
+      {
+        owner: "oss-wishlist",
+        repo: "wishlists",
+        issue_number: issue.number,
+        per_page: 100,
+      }
+    );
+
+    for await (const { data } of iterator) {
+      allComments.push(...data);
+    }
+
+    // Filter for bot comments only
+    const botComments = allComments.filter(
+      (comment) => comment.user?.login === "oss-wishlist-bot"
+    );
+
+    // Get the most recent bot comment timestamp
+    if (botComments.length > 0) {
+      const latestComment = botComments[botComments.length - 1];
+      return latestComment.updated_at || latestComment.created_at;
+    }
+
+    // Fallback: use issue updated timestamp
+    return issue.updated_at;
+  } catch (error) {
+    console.warn(
+      `Error fetching comments for issue ${issue.number}:`,
+      error.message
+    );
+    return issue.updated_at;
+  }
+}
+
+/**
+ * Parse a wishlist issue into simplified format
+ */
 async function parseWishlistIssue(issue, labels) {
   const isApproved = labels.some((label) => label.name === "approved-wishlist");
+  
+  // Skip if not approved
+  if (!isApproved) {
+    return null;
+  }
+  
+  // Get project name and repo from issue body (original form data)
+  const projectName = extractSection(issue.body, "Project Name").trim();
+  const repositoryUrl = extractSection(issue.body, "Project Repository").trim();
+  
+  // Generate unique ID based on repo name + issue number
+  const id = generateWishlistId(repositoryUrl, issue.number);
+  
+  // Extract fulfillment URL from issue body
+  const fulfillmentUrl = extractFulfillmentUrl(issue.body, issue.number);
+  
+  // Get the most recent update timestamp (from latest bot comment or issue)
+  const updatedAt = await getLatestUpdateTimestamp(issue);
+
+  return {
+    id,
+    projectName: projectName || `Wishlist #${issue.number}`,
+    repositoryUrl,
+    fulfillmentUrl,
+    issueNumber: issue.number,
+    updatedAt,
+  };
+}
+
+/**
+ * Parse a wishlist issue into simplified format
+ */
+async function parseWishlistIssue(issue, labels) {
+  const isApproved = labels.some((label) => label.name === "approved-wishlist");
+  
+  // Skip if not approved
+  if (!isApproved) {
+    return null;
+  }
   
   // Get form data: latest bot comment or issue body for edits
   const body = await getLatestFormData(issue);
 
-  // Extract all sections from the form data
+  // Extract only the fields we need
   const projectName = extractSection(body, "Project Name").trim();
-  const maintainerUsername = extractSection(body, "Maintainer GitHub Username")
-    .trim()
-    .replace(/^@/, ""); // Remove @ if present
   const repositoryUrl = extractSection(body, "Project Repository").trim();
-  const ecosystemsText = extractSection(body, "Package Ecosystems");
-  const technologies = parseCommaSeparated(ecosystemsText);
-  const servicesText = extractSection(body, "Services Requested");
-  const wishes = parseCheckboxes(servicesText);
-  const resourcesText = extractSection(body, "Resources Requested");
-  const resources = parseCheckboxes(resourcesText);
-  const urgencyText = extractSection(body, "Urgency Level");
-  const projectSize = extractSection(body, "Project Size").trim();
-  const additionalNotes = extractSection(body, "Additional Notes").trim();
-  const additionalContext = extractSection(body, "Additional Context").trim();
-
-  // Extract urgency level (convert from format with description to simple value)
-  const urgencyMatch = urgencyText.match(/^\s*(.+?)(?:\s*-|$)/m);
-  const urgency = urgencyMatch ? urgencyMatch[1].trim() : "";
+  
+  // Generate unique ID based on repo name + issue number
+  const id = generateWishlistId(repositoryUrl, issue.number);
+  
+  // Extract fulfillment URL from body
+  const fulfillmentUrl = extractFulfillmentUrl(body, issue.number);
 
   return {
-    id: issue.number,
-    projectName: projectName || `Wishlist: ${issue.title}`,
+    id,
+    projectName: projectName || `Wishlist #${issue.number}`,
     repositoryUrl,
-    maintainerUsername,
-    maintainerAvatarUrl: maintainerUsername
-      ? `https://github.com/${maintainerUsername}.png`
-      : "",
-    approved: isApproved,
-    wishes,
-    technologies,
-    resources,
-    urgency,
-    projectSize,
-    additionalNotes,
-    additionalContext,
-    status: isApproved ? "approved" : "pending",
-    createdAt: issue.created_at,
-    updatedAt: issue.updated_at,
+    fulfillmentUrl,
+    issueNumber: issue.number,
   };
 }
 
+/**
+ * Generate the wishlist cache JSON file
+ */
 async function generateCache() {
   try {
     console.log("📋 Fetching wishlists from GitHub...");
 
-    // Fetch only OPEN issues (closed ones are deleted)
+    // Fetch only OPEN issues (closed ones are excluded)
     const issues = await octokit.paginate("GET /repos/{owner}/{repo}/issues", {
       owner: "oss-wishlist",
       repo: "wishlists",
-      state: "open",  // This ensures deleted wishlists don't appear
+      state: "open",
+      labels: "approved-wishlist", // Only fetch approved wishlists
       per_page: 100,
     });
 
-    console.log(`✓ Found ${issues.length} open issues`);
+    console.log(`✓ Found ${issues.length} approved issues`);
 
-    // Parse all wishlists concurrently (await all promises)
-    const wishlists = await Promise.all(
+    // Parse all wishlists concurrently
+    const parsedWishlists = await Promise.all(
       issues
         .filter((issue) => !issue.pull_request)
         .map((issue) => parseWishlistIssue(issue, issue.labels))
     );
+    
+    // Filter out nulls (non-approved wishlists)
+    const wishlists = parsedWishlists.filter((w) => w !== null);
 
-    console.log(`✓ Parsed ${wishlists.length} wishlists`);
+    console.log(`✓ Parsed ${wishlists.length} approved wishlists`);
 
-    // Generate metadata
-    const approvedCount = wishlists.filter((w) => w.approved).length;
-    const allTechnologies = [
-      ...new Set(wishlists.flatMap((w) => w.technologies)),
-    ].sort();
-    const allServices = [...new Set(wishlists.flatMap((w) => w.wishes))].sort();
-
+    // Generate cache data
     const cacheData = {
-      version: "1.0.0",
+      version: "2.0.0",
       generatedAt: new Date().toISOString(),
       totalWishlists: wishlists.length,
-      approvedCount,
-      pendingCount: wishlists.length - approvedCount,
-      ecosystemStats: allTechnologies.reduce((acc, tech) => {
-        acc[tech] = wishlists.filter((w) => w.technologies.includes(tech))
-          .length;
-        return acc;
-      }, {}),
-      serviceStats: allServices.reduce((acc, service) => {
-        acc[service] = wishlists.filter((w) => w.wishes.includes(service))
-          .length;
-        return acc;
-      }, {}),
       wishlists,
     };
 
     fs.writeFileSync("all-wishlists.json", JSON.stringify(cacheData, null, 2));
 
     console.log("✓ Cache generated successfully");
-    console.log(
-      `  - ${approvedCount} approved wishlists`
-    );
-    console.log(
-      `  - ${wishlists.length - approvedCount} pending wishlists`
-    );
-    console.log(
-      `  - ${allTechnologies.length} unique technologies`
-    );
-    console.log(`  - ${allServices.length} unique services`);
+    console.log(`  - ${wishlists.length} approved wishlists`);
+    console.log(`  - File: all-wishlists.json`);
   } catch (error) {
     console.error("❌ Error generating cache:", error);
     process.exit(1);
