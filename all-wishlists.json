@@ -1,66 +1,39 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T20:15:06.145Z",
-  "totalWishlists": 2,
-  "approvedCount": 1,
+  "generatedAt": "2025-11-11T21:11:32.374Z",
+  "totalWishlists": 1,
+  "approvedCount": 0,
   "pendingCount": 1,
   "ecosystemStats": {
-    "Pub (Dart/Flutter)": 2
+    "Packagist (PHP)": 1
   },
   "serviceStats": {
-    "developer": 1,
-    "funding": 1,
-    "governance": 1,
-    "leadership": 1,
-    "maintainer": 1
+    "developer": 1
   },
   "wishlists": [
     {
-      "id": 48,
-      "projectName": "Junie 7",
-      "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
-      "maintainerUsername": "emmairwin",
-      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
-      "approved": true,
-      "wishes": [
-        "funding",
-        "governance"
-      ],
-      "technologies": [
-        "Pub (Dart/Flutter)"
-      ],
-      "resources": [],
-      "urgency": "Medium",
-      "projectSize": "Medium",
-      "additionalNotes": "testing one two",
-      "additionalContext": "testing one two",
-      "status": "approved",
-      "createdAt": "2025-11-11T17:00:56Z",
-      "updatedAt": "2025-11-11T20:14:49Z"
-    },
-    {
-      "id": 47,
-      "projectName": "Testing tuesday 16",
+      "id": 49,
+      "projectName": "My first test",
       "repositoryUrl": "https://github.com/emmairwin/community-portal",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
       "approved": false,
       "wishes": [
-        "developer",
-        "maintainer",
-        "leadership"
+        "developer"
       ],
       "technologies": [
-        "Pub (Dart/Flutter)"
+        "Packagist (PHP)"
       ],
-      "resources": [],
+      "resources": [
+        "hosting"
+      ],
       "urgency": "Medium",
       "projectSize": "Medium",
-      "additionalNotes": "tset",
-      "additionalContext": "tset",
+      "additionalNotes": "project description",
+      "additionalContext": "project description",
       "status": "pending",
-      "createdAt": "2025-11-11T16:49:48Z",
-      "updatedAt": "2025-11-11T19:25:39Z"
+      "createdAt": "2025-11-11T21:11:16Z",
+      "updatedAt": "2025-11-11T21:11:16Z"
     }
   ]
 }
