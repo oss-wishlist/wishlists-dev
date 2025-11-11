@@ -3,48 +3,9 @@
 import { Octokit } from "@octokit/rest";
 import fs from "fs";
 
-// Initialize octokit FIRST before using it
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
-
-async function getLatestFormData(issue) {
-  try {
-    const comments = await octokit.paginate(
-      "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
-      {
-        owner: "oss-wishlist",
-        repo: "wishlists",
-        issue_number: issue.number,  // ← FIXED: was "issue.numberparseWishlistIssue"
-        per_page: 1,
-        sort: "created",
-        direction: "desc",
-      }
-    );
-
-    // If there's a recent comment with form data, use it
-    if (comments.length > 0) {
-      const latestComment = comments[0];
-      // Check if comment is recent (within 1 hour of last issue update)
-      const commentTime = new Date(latestComment.created_at);
-      const issueTime = new Date(issue.updated_at);
-      
-      // If comment is within 1 hour of issue update, it's likely the edit
-      if (commentTime.getTime() - issueTime.getTime() < 3600000) {
-        // Check if comment contains form-like content (has ### sections)
-        if (latestComment.body.includes("###")) {
-          console.log(`  📝 Using latest comment for issue #${issue.number}`);
-          return latestComment.body;
-        }
-      }
-    }
-  } catch (error) {
-    // If fetching comments fails, just use the issue body
-    console.warn(`Could not fetch comments for issue #${issue.number}`);
-  }
-
-  return issue.body;
-}
 
 function extractSection(body, sectionHeader) {
   const regex = new RegExp(
@@ -74,16 +35,15 @@ function parseCommaSeparated(content) {
     .filter((item) => item.length > 0);
 }
 
-async function parseWishlistIssue(issue, labels) {
+function parseWishlistIssue(issue, labels) {
   const isApproved = labels.some((label) => label.name === "approved-wishlist");
-  
-  // Get the most recent form data (comment or body)
-  const body = await getLatestFormData(issue);
+  const body = issue.body || "";
 
+  // Extract all sections from the issue body (which is the source of truth)
   const projectName = extractSection(body, "Project Name").trim();
   const maintainerUsername = extractSection(body, "Maintainer GitHub Username")
     .trim()
-    .replace(/^@/, "");
+    .replace(/^@/, ""); // Remove @ if present
   const repositoryUrl = extractSection(body, "Project Repository").trim();
   const ecosystemsText = extractSection(body, "Package Ecosystems");
   const technologies = parseCommaSeparated(ecosystemsText);
@@ -96,6 +56,7 @@ async function parseWishlistIssue(issue, labels) {
   const additionalNotes = extractSection(body, "Additional Notes").trim();
   const additionalContext = extractSection(body, "Additional Context").trim();
 
+  // Extract urgency level (convert from format with description to simple value)
   const urgencyMatch = urgencyText.match(/^\s*(.+?)(?:\s*-|$)/m);
   const urgency = urgencyMatch ? urgencyMatch[1].trim() : "";
 
@@ -134,15 +95,13 @@ async function generateCache() {
 
     console.log(`✓ Found ${issues.length} open issues`);
 
-    // ← FIXED: Use Promise.all() for async parsing
-    const wishlists = await Promise.all(
-      issues
-        .filter((issue) => !issue.pull_request)
-        .map((issue) => parseWishlistIssue(issue, issue.labels))
-    );
+    const wishlists = issues
+      .filter((issue) => !issue.pull_request)
+      .map((issue) => parseWishlistIssue(issue, issue.labels));
 
     console.log(`✓ Parsed ${wishlists.length} wishlists`);
 
+    // Generate metadata
     const approvedCount = wishlists.filter((w) => w.approved).length;
     const allTechnologies = [
       ...new Set(wishlists.flatMap((w) => w.technologies)),
