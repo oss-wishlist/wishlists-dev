@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T19:31:22.333Z",
+  "generatedAt": "2025-11-11T19:53:48.522Z",
   "totalWishlists": 2,
   "approvedCount": 1,
   "pendingCount": 1,
@@ -17,7 +17,7 @@
   "wishlists": [
     {
       "id": 48,
-      "projectName": "Junie 3",
+      "projectName": "Junie 4",
       "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
@@ -29,16 +29,14 @@
       "technologies": [
         "Pub (Dart/Flutter)"
       ],
-      "resources": [
-        "hosting"
-      ],
+      "resources": [],
       "urgency": "Medium",
       "projectSize": "Medium",
       "additionalNotes": "testing one two",
       "additionalContext": "testing one two",
       "status": "approved",
       "createdAt": "2025-11-11T17:00:56Z",
-      "updatedAt": "2025-11-11T19:31:05Z"
+      "updatedAt": "2025-11-11T19:53:33Z"
     },
     {
       "id": 47,
