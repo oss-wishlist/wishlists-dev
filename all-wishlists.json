@@ -1,35 +1,919 @@
 {
-  "schema_version": "1.0.0",
-  "generated_by": "OSS Wishlist Sync Action",
-  "data_source": "GitHub Issues (oss-wishlist/wishlists)",
+  "version": "1.0.0",
+  "generatedAt": "2025-11-11T04:22:46.404Z",
+  "totalWishlists": 42,
+  "approvedCount": 9,
+  "pendingCount": 33,
+  "ecosystemStats": {
+    "Crates.io (Rust)": 2,
+    "Hackage (Haskell)": 1,
+    "Hex (Elixir)": 1,
+    "Maven Central (Java)": 1,
+    "Pub (Dart/Flutter)": 2,
+    "PyPI (Python)": 1,
+    "RubyGems (Ruby)": 1,
+    "npm (Node.js/JavaScript)": 1
+  },
+  "serviceStats": {
+    "Funding Strategy": 1,
+    "Project Governance Setup": 1,
+    "Security Audit": 1,
+    "dependency": 8,
+    "developer": 6,
+    "funding": 10,
+    "github": 1,
+    "governance": 17,
+    "leadership": 10,
+    "maintainer": 1,
+    "moderation": 4
+  },
   "wishlists": [
     {
       "id": 42,
       "projectName": "Monday Part two",
       "repositoryUrl": "https://github.com/emmairwin/teach.webmaker.org",
-      "wishlistUrl": "/wishlist/42",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
       "approved": false,
-      "status": "Open",
-      "created_at": "2025-11-11T04:12:52Z",
-      "updated_at": "2025-11-11T04:12:52Z",
       "wishes": [
-        "governance-setup"
+        "governance"
       ],
-      "urgency": "medium",
-      "projectSize": "medium",
-      "additionalNotes": "This repo is for tracking initiatives of the Mozilla Learning Networks team.\n\ntest one",
       "technologies": [
         "Pub (Dart/Flutter)"
       ],
-      "openToSponsorship": true,
-      "wantsFundingYml": false,
       "resources": [
-        "hosting-infrastructure"
-      ]
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "test one",
+      "additionalContext": "This repo is for tracking initiatives of the Mozilla Learning Networks team.\n\ntest one",
+      "status": "pending",
+      "createdAt": "2025-11-11T04:12:52Z",
+      "updatedAt": "2025-11-11T04:12:52Z"
+    },
+    {
+      "id": 41,
+      "projectName": "Monday test",
+      "repositoryUrl": "https://github.com/emmairwin/community-portal",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "leadership",
+        "funding"
+      ],
+      "technologies": [
+        "Hackage (Haskell)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "Description of my project",
+      "additionalContext": "Description of my project",
+      "status": "approved",
+      "createdAt": "2025-11-11T03:10:00Z",
+      "updatedAt": "2025-11-11T04:11:47Z"
+    },
+    {
+      "id": 40,
+      "projectName": "purl",
+      "repositoryUrl": "https://github.com/andrew/purl",
+      "maintainerUsername": "andrew",
+      "maintainerAvatarUrl": "https://github.com/andrew.png",
+      "approved": false,
+      "wishes": [
+        "funding",
+        "governance",
+        "developer"
+      ],
+      "technologies": [
+        "RubyGems (Ruby)"
+      ],
+      "resources": [],
+      "urgency": "Low",
+      "projectSize": "Small",
+      "additionalNotes": "purl is a Ruby library for working with Package URLs (PURLs) - the standard way to identify software packages across different ecosystems. It handles parsing, validation, and generation of PURLs for 37 package types.\n\nWhat makes this gem useful is the bidirectional registry URL conversion - you can convert PURLs to registry URLs (like turning pkg:gem/rails@7.0.0 into https://rubygems.org/gems/rails) and parse registry URLs back into PURLs. It also includes a CLI tool with JSON output, security advisory lookups, and passes 100% of the official PURL spec test suite.\n\nYour support helps me maintain this library and add support for new package ecosystems as they're added to the spec. This is the only Ruby implementation with full spec compliance and features like private registry support, making it useful for anyone building SBOM tools, dependency analyzers, or security scanning tools in Ruby.",
+      "additionalContext": "A Ruby library for parsing, validating, and generating Package URLs (PURLs) as defined by the PURL specification\n\npurl is a Ruby library for working with Package URLs (PURLs) - the standard way to identify software packages across different ecosystems. It handles parsing, validation, and generation of PURLs for 37 package types.\n\nWhat makes this gem useful is the bidirectional registry URL conversion - you can convert PURLs to registry URLs (like turning pkg:gem/rails@7.0.0 into https://rubygems.org/gems/rails) and parse registry URLs back into PURLs. It also includes a CLI tool with JSON output, security advisory lookups, and passes 100% of the official PURL spec test suite.\n\nYour support helps me maintain this library and add support for new package ecosystems as they're added to the spec. This is the only Ruby implementation with full spec compliance and features like private registry support, making it useful for anyone building SBOM tools, dependency analyzers, or security scanning tools in Ruby.",
+      "status": "pending",
+      "createdAt": "2025-11-10T18:42:58Z",
+      "updatedAt": "2025-11-11T03:00:27Z"
+    },
+    {
+      "id": 39,
+      "projectName": "Lisa Simpson",
+      "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "dependency",
+        "governance"
+      ],
+      "technologies": [
+        "Crates.io (Rust)"
+      ],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "",
+      "additionalContext": "new-repo-1",
+      "status": "pending",
+      "createdAt": "2025-11-10T02:01:33Z",
+      "updatedAt": "2025-11-11T03:00:26Z"
+    },
+    {
+      "id": 38,
+      "projectName": "New create mode",
+      "repositoryUrl": "https://github.com/emmairwin/emmairwin",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "funding",
+        "leadership"
+      ],
+      "technologies": [
+        "Hex (Elixir)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "",
+      "additionalContext": "My personal repo",
+      "status": "pending",
+      "createdAt": "2025-11-10T00:25:37Z",
+      "updatedAt": "2025-11-11T03:00:26Z"
+    },
+    {
+      "id": 37,
+      "projectName": "testone two",
+      "repositoryUrl": "https://github.com/emmairwin/community-portal",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance",
+        "leadership"
+      ],
+      "technologies": [
+        "Pub (Dart/Flutter)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-11-09T23:58:12Z",
+      "updatedAt": "2025-11-10T00:24:39Z"
+    },
+    {
+      "id": 36,
+      "projectName": "Repository camera repo for testing (edited)",
+      "repositoryUrl": "https://github.com/emmairwin/wildlife-camera",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "developer",
+        "leadership"
+      ],
+      "technologies": [
+        "Maven Central (Java)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "some additional notes from Emma",
+      "additionalContext": "A collection of somewhat memorable or interesting shots captured by our wildlife camera in our backyward.\n\nsome additional notes from Emma",
+      "status": "approved",
+      "createdAt": "2025-11-08T21:29:09Z",
+      "updatedAt": "2025-11-11T03:00:26Z"
+    },
+    {
+      "id": 35,
+      "projectName": "Sunnydeveloper.com",
+      "repositoryUrl": "http://sunnydeveloper.com",
+      "maintainerUsername": "sunnydeveloper.com",
+      "maintainerAvatarUrl": "https://github.com/sunnydeveloper.com.png",
+      "approved": false,
+      "wishes": [
+        "funding"
+      ],
+      "technologies": [],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "test",
+      "additionalContext": "Project entered manually\n\ntest",
+      "status": "pending",
+      "createdAt": "2025-11-07T00:45:47Z",
+      "updatedAt": "2025-11-11T03:00:25Z"
+    },
+    {
+      "id": 34,
+      "projectName": "The best ever community portal",
+      "repositoryUrl": "https://github.com/emmairwin/community-portal",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "governance",
+        "leadership"
+      ],
+      "technologies": [
+        "PyPI (Python)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "testing one two\n\n\n\nUpdated via [OSS Wishlist Platform](http://localhost:4324)\n\nUpdated via [OSS Wishlist Platform](http://localhost:4324)\n\nUpdated via [OSS Wishlist Platform](http://localhost:4324)",
+      "additionalContext": "testing one two\n\n\n\nUpdated via [OSS Wishlist Platform](http://localhost:4324)\n\nUpdated via [OSS Wishlist Platform](http://localhost:4324)\n\nUpdated via [OSS Wishlist Platform](http://localhost:4324)",
+      "status": "approved",
+      "createdAt": "2025-11-03T18:03:04Z",
+      "updatedAt": "2025-11-09T23:21:36Z"
+    },
+    {
+      "id": 33,
+      "projectName": "Project TItle for New Repo",
+      "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "developer",
+        "funding",
+        "leadership"
+      ],
+      "technologies": [
+        "npm (Node.js/JavaScript)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "I really want this wish to come true, these resources will help me achieve security so I can work on features and bugs",
+      "additionalContext": "new-repo-1\n\nI really want this wish to come true, these resources will help me achieve security so I can work on features and bugs",
+      "status": "approved",
+      "createdAt": "2025-11-03T17:51:44Z",
+      "updatedAt": "2025-11-09T23:22:46Z"
+    },
+    {
+      "id": 32,
+      "projectName": "one two test",
+      "repositoryUrl": "https://github.com/emmairwin/get-profile-data-of-repo-stargazers-graphql",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "dependency",
+        "funding",
+        "developer"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "asf",
+      "additionalContext": "Get profile data of repo stargazers using the GraphQL API, way faster than using the REST API.\n\nasf",
+      "status": "pending",
+      "createdAt": "2025-10-31T21:37:43Z",
+      "updatedAt": "2025-11-10T01:04:02Z"
+    },
+    {
+      "id": 31,
+      "projectName": "title testing funding link",
+      "repositoryUrl": "https://github.com/emmairwin/moderation",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "developer",
+        "dependency"
+      ],
+      "technologies": [],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "additional notes",
+      "additionalContext": "A simple  and entirely experimental script to test moderation scoring for a repo\n\nadditional notes",
+      "status": "approved",
+      "createdAt": "2025-10-31T20:00:35Z",
+      "updatedAt": "2025-11-10T00:24:34Z"
+    },
+    {
+      "id": 30,
+      "projectName": "test PR",
+      "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "funding",
+        "dependency",
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "",
+      "additionalContext": "new-repo-1",
+      "status": "approved",
+      "createdAt": "2025-10-31T19:05:21Z",
+      "updatedAt": "2025-11-03T17:24:30Z"
+    },
+    {
+      "id": 29,
+      "projectName": "test title",
+      "repositoryUrl": "https://github.com/emmairwin/mcp-oss-metrics",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "developer",
+        "funding"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Large",
+      "additionalNotes": "some notes",
+      "additionalContext": "OSS Metrics MCP Server (test/prototype/learning)\n\nsome notes",
+      "status": "approved",
+      "createdAt": "2025-10-29T21:24:41Z",
+      "updatedAt": "2025-11-10T00:12:37Z"
+    },
+    {
+      "id": 28,
+      "projectName": "staging test",
+      "repositoryUrl": "https://github.com/emmairwin/sunnydeveloper.github.io",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "leadership"
+      ],
+      "technologies": [
+        "Crates.io (Rust)"
+      ],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "testing",
+      "additionalContext": "A repo just for me with writing by me for whoever wants to read it\n\ntesting",
+      "status": "approved",
+      "createdAt": "2025-10-23T18:54:18Z",
+      "updatedAt": "2025-11-09T23:26:13Z"
+    },
+    {
+      "id": 27,
+      "projectName": "testing one two three",
+      "repositoryUrl": "https://github.com/emmairwin/emmairwin",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance",
+        "leadership"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "atesting",
+      "additionalContext": "My personal repo\n\natesting",
+      "status": "pending",
+      "createdAt": "2025-10-23T17:34:08Z",
+      "updatedAt": "2025-10-29T21:20:20Z"
+    },
+    {
+      "id": 26,
+      "projectName": "Testing Wishlist 1",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": true,
+      "wishes": [
+        "maintainer"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "additional notes",
+      "additionalContext": "a place to hold some tests on oss and alignment\n\nadditional notes",
+      "status": "approved",
+      "createdAt": "2025-10-22T18:13:39Z",
+      "updatedAt": "2025-11-03T17:24:12Z"
+    },
+    {
+      "id": 25,
+      "projectName": "testing new field",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance",
+        "leadership"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "a place to hold some tests on oss and alignment",
+      "status": "pending",
+      "createdAt": "2025-10-20T18:41:09Z",
+      "updatedAt": "2025-10-22T17:14:46Z"
+    },
+    {
+      "id": 24,
+      "projectName": "Emmas wishlist for Project amazing",
+      "repositoryUrl": "https://github.com/emmairwin/Project-Security-Metrics",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "dependency"
+      ],
+      "technologies": [],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "Collect, curate, and communicate relevant security metrics for open source projects.",
+      "status": "pending",
+      "createdAt": "2025-10-20T17:10:06Z",
+      "updatedAt": "2025-10-22T17:14:45Z"
+    },
+    {
+      "id": 23,
+      "projectName": "Emmas personal repo",
+      "repositoryUrl": "https://github.com/emmairwin/emmairwin",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "dependency",
+        "moderation"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "please let me know if you have any questions",
+      "additionalContext": "My personal repo\n\nplease let me know if you have any questions",
+      "status": "pending",
+      "createdAt": "2025-10-20T16:45:37Z",
+      "updatedAt": "2025-10-22T17:14:45Z"
+    },
+    {
+      "id": 22,
+      "projectName": "My awesome library",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "a place to hold some tests on oss and alignment",
+      "status": "pending",
+      "createdAt": "2025-10-19T04:06:00Z",
+      "updatedAt": "2025-10-22T17:14:44Z"
+    },
+    {
+      "id": 21,
+      "projectName": "My awesome library",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "a place to hold some tests on oss and alignment",
+      "status": "pending",
+      "createdAt": "2025-10-19T03:56:20Z",
+      "updatedAt": "2025-10-19T04:05:33Z"
+    },
+    {
+      "id": 20,
+      "projectName": "My awesome library",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "a place to hold some tests on oss and alignment",
+      "status": "pending",
+      "createdAt": "2025-10-19T03:29:06Z",
+      "updatedAt": "2025-10-19T03:55:40Z"
+    },
+    {
+      "id": 19,
+      "projectName": "My awesome library",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "a place to hold some tests on oss and alignment",
+      "status": "pending",
+      "createdAt": "2025-10-17T23:24:31Z",
+      "updatedAt": "2025-10-19T03:28:31Z"
+    },
+    {
+      "id": 18,
+      "projectName": "Maintainer cohort test",
+      "repositoryUrl": "https://github.com/emmairwin/maintainer-cohort",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "moderation",
+        "dependency"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "testing one two",
+      "additionalContext": "Github Repo for Maintainer Cohort Content\n\ntesting one two",
+      "status": "pending",
+      "createdAt": "2025-10-16T21:04:34Z",
+      "updatedAt": "2025-10-22T17:14:44Z"
+    },
+    {
+      "id": 17,
+      "projectName": "testing",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "github",
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "test",
+      "additionalContext": "a place to hold some tests on oss and alignment\n\ntest",
+      "status": "pending",
+      "createdAt": "2025-10-16T20:46:37Z",
+      "updatedAt": "2025-10-16T21:05:27Z"
+    },
+    {
+      "id": 16,
+      "projectName": "test 44",
+      "repositoryUrl": "https://github.com/emmairwin/maintainer-cohort",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance",
+        "funding"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "test",
+      "additionalContext": "Github Repo for Maintainer Cohort Content\n\ntest",
+      "status": "pending",
+      "createdAt": "2025-10-16T20:12:13Z",
+      "updatedAt": "2025-10-16T20:35:27Z"
+    },
+    {
+      "id": 15,
+      "projectName": "test 33",
+      "repositoryUrl": "https://github.com/emmairwin/maintainer-cohort",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "funding"
+      ],
+      "technologies": [],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "Github Repo for Maintainer Cohort Content",
+      "status": "pending",
+      "createdAt": "2025-10-16T20:11:41Z",
+      "updatedAt": "2025-10-16T20:34:42Z"
+    },
+    {
+      "id": 14,
+      "projectName": "test 7",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "a place to hold some tests on oss and alignment",
+      "status": "pending",
+      "createdAt": "2025-10-16T19:51:23Z",
+      "updatedAt": "2025-10-16T20:10:57Z"
+    },
+    {
+      "id": 13,
+      "projectName": "test 3",
+      "repositoryUrl": "https://github.com/emmairwin/ai-alignment-tests",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "moderation",
+        "governance"
+      ],
+      "technologies": [],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "a place to hold some tests on oss and alignment",
+      "status": "pending",
+      "createdAt": "2025-10-16T02:12:38Z",
+      "updatedAt": "2025-10-16T19:34:54Z"
+    },
+    {
+      "id": 12,
+      "projectName": "test 2",
+      "repositoryUrl": "https://github.com/emmairwin/emmairwin",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "governance",
+        "moderation"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "My personal repo",
+      "status": "pending",
+      "createdAt": "2025-10-16T02:04:38Z",
+      "updatedAt": "2025-10-16T20:11:09Z"
+    },
+    {
+      "id": 11,
+      "projectName": "test 1",
+      "repositoryUrl": "https://github.com/emmairwin/maintainer-cohort",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "dependency",
+        "leadership"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Medium",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "Github Repo for Maintainer Cohort Content\n\ntest notes",
+      "status": "pending",
+      "createdAt": "2025-10-16T02:03:49Z",
+      "updatedAt": "2025-10-16T19:48:49Z"
+    },
+    {
+      "id": 10,
+      "projectName": "Wishlist: Wishlist: test one two",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-10-15T02:22:05Z",
+      "updatedAt": "2025-10-15T21:44:27Z"
+    },
+    {
+      "id": 9,
+      "projectName": "Wishlist: Wishlist: emma stes",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-10-06T16:12:44Z",
+      "updatedAt": "2025-10-16T01:58:28Z"
+    },
+    {
+      "id": 8,
+      "projectName": "Wishlist: Wishlist: Emma testing",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-10-06T14:54:56Z",
+      "updatedAt": "2025-10-15T21:47:03Z"
+    },
+    {
+      "id": 7,
+      "projectName": "Wishlist: Wishlist: My project that needs",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-10-01T20:11:23Z",
+      "updatedAt": "2025-10-16T01:58:27Z"
+    },
+    {
+      "id": 6,
+      "projectName": "Wishlist: Wishlist: My projects that matter - AWS Credits, Funding Strategy Development",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-10-01T17:57:54Z",
+      "updatedAt": "2025-10-15T21:45:56Z"
+    },
+    {
+      "id": 5,
+      "projectName": "Wishlist: Emma's Rust Project",
+      "repositoryUrl": "",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "Security Audit",
+        "Project Governance Setup",
+        "Funding Strategy"
+      ],
+      "technologies": [],
+      "resources": [],
+      "urgency": "Low",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "test",
+      "status": "pending",
+      "createdAt": "2025-09-30T00:51:05Z",
+      "updatedAt": "2025-10-16T01:58:27Z"
+    },
+    {
+      "id": 4,
+      "projectName": "Wishlist: Wishlist: emmairiwn - Azure Credits, GitHub Copilot Budget",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-09-28T04:27:35Z",
+      "updatedAt": "2025-09-30T00:01:42Z"
+    },
+    {
+      "id": 3,
+      "projectName": "Wishlist: Wishlist: emmairwin - Funding Strategy Development, Governance Setup",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-09-24T16:41:00Z",
+      "updatedAt": "2025-09-30T00:01:42Z"
+    },
+    {
+      "id": 2,
+      "projectName": "Wishlist: Wishlist: emmairwin - Community strategy, Employee Open Source Training",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-09-23T21:47:54Z",
+      "updatedAt": "2025-09-30T00:01:42Z"
+    },
+    {
+      "id": 1,
+      "projectName": "Wishlist: Wishlist: emmairwin - Community strategy, Open Source Dependency Analysis, Project Governance Setup",
+      "repositoryUrl": "",
+      "maintainerUsername": "",
+      "maintainerAvatarUrl": "",
+      "approved": false,
+      "wishes": [],
+      "technologies": [],
+      "resources": [],
+      "urgency": "",
+      "projectSize": "",
+      "additionalNotes": "",
+      "additionalContext": "",
+      "status": "pending",
+      "createdAt": "2025-09-23T20:20:43Z",
+      "updatedAt": "2025-09-30T00:01:41Z"
     }
-  ],
-  "lastUpdated": "2025-11-11T04:17:57.388Z",
-  "count": 1
+  ]
 }
