@@ -5,9 +5,6 @@ on:
     types:
       - opened
       - deleted
-      - reopened
-      - labeled
-      - unlabeled
   issue_comment:
     types:
       - created
