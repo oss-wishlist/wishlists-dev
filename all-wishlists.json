@@ -1,10 +1,39 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T15:41:46.483Z",
-  "totalWishlists": 0,
+  "generatedAt": "2025-11-11T15:42:54.792Z",
+  "totalWishlists": 1,
   "approvedCount": 0,
-  "pendingCount": 0,
-  "ecosystemStats": {},
-  "serviceStats": {},
-  "wishlists": []
+  "pendingCount": 1,
+  "ecosystemStats": {
+    "Pub (Dart/Flutter)": 1
+  },
+  "serviceStats": {
+    "funding": 1
+  },
+  "wishlists": [
+    {
+      "id": 44,
+      "projectName": "Tuesday One",
+      "repositoryUrl": "https://github.com/emmairwin/emmairwin",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
+      "wishes": [
+        "funding"
+      ],
+      "technologies": [
+        "Pub (Dart/Flutter)"
+      ],
+      "resources": [
+        "hosting"
+      ],
+      "urgency": "Medium",
+      "projectSize": "Medium",
+      "additionalNotes": "test",
+      "additionalContext": "My personal repo\n\ntest",
+      "status": "pending",
+      "createdAt": "2025-11-11T15:42:38Z",
+      "updatedAt": "2025-11-11T15:42:38Z"
+    }
+  ]
 }
