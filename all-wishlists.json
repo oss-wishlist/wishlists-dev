@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T17:58:46.757Z",
+  "generatedAt": "2025-11-11T18:04:50.092Z",
   "totalWishlists": 2,
   "approvedCount": 0,
   "pendingCount": 2,
@@ -11,8 +11,8 @@
   "serviceStats": {
     "dependency": 2,
     "developer": 1,
-    "funding": 1,
-    "maintainer": 1
+    "maintainer": 1,
+    "moderation": 1
   },
   "wishlists": [
     {
@@ -41,14 +41,14 @@
     },
     {
       "id": 47,
-      "projectName": "Testing tuesday 5",
+      "projectName": "Testing tuesday 6",
       "repositoryUrl": "https://github.com/emmairwin/community-portal",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
       "approved": false,
       "wishes": [
         "dependency",
-        "funding"
+        "moderation"
       ],
       "technologies": [
         "Pub (Dart/Flutter)"
@@ -60,7 +60,7 @@
       "additionalContext": "tset",
       "status": "pending",
       "createdAt": "2025-11-11T16:49:48Z",
-      "updatedAt": "2025-11-11T17:58:32Z"
+      "updatedAt": "2025-11-11T18:04:36Z"
     }
   ]
 }
