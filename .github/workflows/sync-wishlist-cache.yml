@@ -20,6 +20,8 @@ concurrency:
 
 jobs:
   sync-cache:
+    # Skip if this is a comment from the bot (to avoid double-trigger)
+    if: github.event_name != 'issue_comment' || github.event.comment.user.login != 'oss-wishlist-bot'
     runs-on: ubuntu-latest
     
     permissions:
