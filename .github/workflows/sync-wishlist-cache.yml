@@ -7,11 +7,8 @@ on:
       - edited
       - deleted
       - reopened
-  issue_comment:
-    types:
-      - created
-      - edited
-      - deleted
+      - labeled
+      - unlabeled
   workflow_dispatch:
 
 concurrency:
@@ -20,8 +17,17 @@ concurrency:
 
 jobs:
   sync-cache:
-    # Skip if this is a comment from the bot (to avoid double-trigger)
-    if: github.event_name != 'issue_comment' || github.event.comment.user.login != 'oss-wishlist-bot'
+    # Run if: body/title edited, labeled/unlabeled, or opened/deleted/reopened
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && 
+       (github.event.action == 'opened' || 
+        github.event.action == 'deleted' || 
+        github.event.action == 'reopened' ||
+        github.event.action == 'labeled' ||
+        github.event.action == 'unlabeled' ||
+        (github.event.action == 'edited' && 
+         (github.event.changes.body.from != null || github.event.changes.title.from != null))))
     runs-on: ubuntu-latest
     
     permissions:
@@ -82,10 +88,6 @@ jobs:
             ISSUE_NUM="${{ github.event.issue.number }}"
             ISSUE_ACTION="${{ github.event.action }}"
             COMMIT_MSG="chore: update wishlist cache from issue #${ISSUE_NUM} (${ISSUE_ACTION})"
-          elif [ "${{ github.event_name }}" == "issue_comment" ]; then
-            ISSUE_NUM="${{ github.event.issue.number }}"
-            COMMENT_ACTION="${{ github.event.action }}"
-            COMMIT_MSG="chore: update wishlist cache from comment on issue #${ISSUE_NUM} (${COMMENT_ACTION})"
           else
             COMMIT_MSG="chore: update wishlist cache (manual trigger)"
           fi
