@@ -3,6 +3,11 @@
 import { Octokit } from "@octokit/rest";
 import fs from "fs";
 
+// Initialize octokit FIRST before using it
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
+
 async function getLatestFormData(issue) {
   try {
     const comments = await octokit.paginate(
@@ -10,7 +15,7 @@ async function getLatestFormData(issue) {
       {
         owner: "oss-wishlist",
         repo: "wishlists",
-        issue_number: issue.numberparseWishlistIssue
+        issue_number: issue.number,  // ← FIXED: was "issue.numberparseWishlistIssue"
         per_page: 1,
         sort: "created",
         direction: "desc",
@@ -26,7 +31,11 @@ async function getLatestFormData(issue) {
       
       // If comment is within 1 hour of issue update, it's likely the edit
       if (commentTime.getTime() - issueTime.getTime() < 3600000) {
-        return latestComment.body;
+        // Check if comment contains form-like content (has ### sections)
+        if (latestComment.body.includes("###")) {
+          console.log(`  📝 Using latest comment for issue #${issue.number}`);
+          return latestComment.body;
+        }
       }
     }
   } catch (error) {
@@ -36,10 +45,6 @@ async function getLatestFormData(issue) {
 
   return issue.body;
 }
-
-const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN,
-});
 
 function extractSection(body, sectionHeader) {
   const regex = new RegExp(
@@ -127,11 +132,14 @@ async function generateCache() {
       per_page: 100,
     });
 
-    console.log(`✓ Found ${issues.length} issues`);
+    console.log(`✓ Found ${issues.length} open issues`);
 
-    const wishlists = issues
-      .filter((issue) => !issue.pull_request)
-      .map((issue) => parseWishlistIssue(issue, issue.labels));
+    // ← FIXED: Use Promise.all() for async parsing
+    const wishlists = await Promise.all(
+      issues
+        .filter((issue) => !issue.pull_request)
+        .map((issue) => parseWishlistIssue(issue, issue.labels))
+    );
 
     console.log(`✓ Parsed ${wishlists.length} wishlists`);
 
