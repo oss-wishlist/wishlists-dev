@@ -1,7 +1,3 @@
-// API endpoint to create GitHub issues for wishlists
-// 
-// Repository configuration is in /src/config/github.ts
-//
 import type { APIRoute } from 'astro';
 import { GITHUB_CONFIG } from '../../config/github.js';
 import { wishlistSubmissionSchema, formatZodError } from '../../lib/validation.js';
