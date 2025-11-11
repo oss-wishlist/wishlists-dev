@@ -35,11 +35,62 @@ function parseCommaSeparated(content) {
     .filter((item) => item.length > 0);
 }
 
-function parseWishlistIssue(issue, labels) {
-  const isApproved = labels.some((label) => label.name === "approved-wishlist");
-  const body = issue.body || "";
+async function getLatestFormData(issue) {
+  try {
+    // Fetch all comments for this issue
+    let allComments = [];
+    let page = 1;
+    const perPage = 100;
 
-  // Extract all sections from the issue body (which is the source of truth)
+    while (true) {
+      const response = await octokit.paginate.iterator(
+        "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
+        {
+          owner: "oss-wishlist",
+          repo: "wishlists",
+          issue_number: issue.number,
+          per_page: perPage,
+        }
+      );
+
+      for await (const { data } of response) {
+        allComments = allComments.concat(data);
+      }
+      break;
+    }
+
+    // Filter for bot comments only
+    const botComments = allComments.filter(
+      (comment) => comment.user?.login === "oss-wishlist-bot"
+    );
+
+    // Find latest comment with form data (contains ### sections)
+    const latestBotComment = [...botComments]
+      .reverse()
+      .find((comment) => comment.body?.includes("###"));
+
+    if (latestBotComment?.body) {
+      return latestBotComment.body;
+    }
+
+    // Fallback: use issue body (creation data)
+    return issue.body || "";
+  } catch (error) {
+    console.warn(
+      `Error fetching comments for issue ${issue.number}:`,
+      error.message
+    );
+    return issue.body || "";
+  }
+}
+
+async function parseWishlistIssue(issue, labels) {
+  const isApproved = labels.some((label) => label.name === "approved-wishlist");
+  
+  // Get form data: latest bot comment or issue body for edits
+  const body = await getLatestFormData(issue);
+
+  // Extract all sections from the form data
   const projectName = extractSection(body, "Project Name").trim();
   const maintainerUsername = extractSection(body, "Maintainer GitHub Username")
     .trim()
@@ -86,18 +137,22 @@ async function generateCache() {
   try {
     console.log("📋 Fetching wishlists from GitHub...");
 
+    // Fetch only OPEN issues (closed ones are deleted)
     const issues = await octokit.paginate("GET /repos/{owner}/{repo}/issues", {
       owner: "oss-wishlist",
       repo: "wishlists",
-      state: "open",
+      state: "open",  // This ensures deleted wishlists don't appear
       per_page: 100,
     });
 
     console.log(`✓ Found ${issues.length} open issues`);
 
-    const wishlists = issues
-      .filter((issue) => !issue.pull_request)
-      .map((issue) => parseWishlistIssue(issue, issue.labels));
+    // Parse all wishlists concurrently (await all promises)
+    const wishlists = await Promise.all(
+      issues
+        .filter((issue) => !issue.pull_request)
+        .map((issue) => parseWishlistIssue(issue, issue.labels))
+    );
 
     console.log(`✓ Parsed ${wishlists.length} wishlists`);
 
