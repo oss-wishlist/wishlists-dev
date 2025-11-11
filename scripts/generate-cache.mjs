@@ -87,7 +87,7 @@ async function generateCache() {
     const issues = await octokit.paginate("GET /repos/{owner}/{repo}/issues", {
       owner: "oss-wishlist",
       repo: "wishlists",
-      state: "all",
+      state: "open",
       per_page: 100,
     });
 
