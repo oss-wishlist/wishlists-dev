@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T04:50:29.593Z",
+  "generatedAt": "2025-11-11T05:04:31.988Z",
   "totalWishlists": 1,
   "approvedCount": 0,
   "pendingCount": 1,
@@ -13,7 +13,7 @@
   "wishlists": [
     {
       "id": 42,
-      "projectName": "Monday Part three",
+      "projectName": "Monday Part six",
       "repositoryUrl": "https://github.com/emmairwin/teach.webmaker.org",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
@@ -24,16 +24,14 @@
       "technologies": [
         "Pub (Dart/Flutter)"
       ],
-      "resources": [
-        "hosting"
-      ],
+      "resources": [],
       "urgency": "Medium",
       "projectSize": "Medium",
       "additionalNotes": "test one",
       "additionalContext": "test one",
       "status": "pending",
       "createdAt": "2025-11-11T04:12:52Z",
-      "updatedAt": "2025-11-11T04:48:12Z"
+      "updatedAt": "2025-11-11T05:04:19Z"
     }
   ]
 }
