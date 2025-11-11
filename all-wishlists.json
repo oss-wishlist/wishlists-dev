@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T04:36:02.835Z",
+  "generatedAt": "2025-11-11T04:48:27.615Z",
   "totalWishlists": 1,
   "approvedCount": 0,
   "pendingCount": 1,
@@ -13,7 +13,7 @@
   "wishlists": [
     {
       "id": 42,
-      "projectName": "Monday Part two",
+      "projectName": "Monday Part three",
       "repositoryUrl": "https://github.com/emmairwin/teach.webmaker.org",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
@@ -30,10 +30,10 @@
       "urgency": "Medium",
       "projectSize": "Medium",
       "additionalNotes": "test one",
-      "additionalContext": "This repo is for tracking initiatives of the Mozilla Learning Networks team.\n\ntest one",
+      "additionalContext": "test one",
       "status": "pending",
       "createdAt": "2025-11-11T04:12:52Z",
-      "updatedAt": "2025-11-11T04:35:47Z"
+      "updatedAt": "2025-11-11T04:48:12Z"
     }
   ]
 }
