@@ -128,20 +128,24 @@ async function parseWishlistIssue(issue, labels) {
     return null;
   }
   
+  // Debug: print the full issue body to see available sections
+  console.log(`\n=== Issue #${issue.number} Body ===`);
+  console.log(issue.body);
+  console.log(`=== End Issue #${issue.number} ===\n`);
+  
   // Get project name and repo from issue body (original form data)
   const projectName = extractSection(issue.body, "Project Name").trim();
-  const repositoryUrl = extractSection(issue.body, "Project Repository").trim();
+  const repositoryUrl = extractSection(issue.body, "Repository").trim();
+  
+  console.log(`Issue #${issue.number} extracted:`);
+  console.log(`  - Project Name: "${projectName}"`);
+  console.log(`  - Repository URL: "${repositoryUrl}"`);
   
   // Debug: log what we extracted
   if (!repositoryUrl) {
-    console.warn(`⚠️  Issue #${issue.number}: No repository URL found. Project: "${projectName}"`);
+    console.warn(`WARNING: Issue #${issue.number}: No repository URL found. Project: "${projectName}"`);
     console.warn(`   Using project name for ID generation`);
-  }
-  
-  // Generate unique ID based on repo name + issue number
-  // If no repo URL, use project name as fallback
-  const id = repositoryUrl 
-    ? generateWishlistId(repositoryUrl, issue.number)
+  } ? generateWishlistId(repositoryUrl, issue.number)
     : `${projectName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}-${issue.number}`;
   
   // Extract fulfillment URL from issue body
@@ -165,7 +169,7 @@ async function parseWishlistIssue(issue, labels) {
  */
 async function generateCache() {
   try {
-    console.log("📋 Fetching wishlists from GitHub...");
+    console.log("Fetching wishlists from GitHub...");
 
     // Fetch only OPEN issues (closed ones are excluded)
     const issues = await octokit.paginate("GET /repos/{owner}/{repo}/issues", {
@@ -176,7 +180,7 @@ async function generateCache() {
       per_page: 100,
     });
 
-    console.log(`✓ Found ${issues.length} approved issues`);
+    console.log(`Found ${issues.length} approved issues`);
 
     // Parse all wishlists concurrently
     const parsedWishlists = await Promise.all(
@@ -188,7 +192,7 @@ async function generateCache() {
     // Filter out nulls (non-approved wishlists)
     const wishlists = parsedWishlists.filter((w) => w !== null);
 
-    console.log(`✓ Parsed ${wishlists.length} approved wishlists`);
+    console.log(`Parsed ${wishlists.length} approved wishlists`);
 
     // Generate cache data
     const cacheData = {
@@ -200,11 +204,11 @@ async function generateCache() {
 
     fs.writeFileSync("all-wishlists.json", JSON.stringify(cacheData, null, 2));
 
-    console.log("✓ Cache generated successfully");
+    console.log("Cache generated successfully");
     console.log(`  - ${wishlists.length} approved wishlists`);
     console.log(`  - File: all-wishlists.json`);
   } catch (error) {
-    console.error("❌ Error generating cache:", error);
+    console.error("ERROR generating cache:", error);
     process.exit(1);
   }
 }
