@@ -97,3 +97,10 @@ jobs:
           git add -f all-wishlists.json
           git commit -m "chore: update wishlist cache (force commit)" || echo "Nothing to commit"
           git push origin main || echo "Nothing to push"
+
+      - name: Notify website to refresh cache
+        run: |
+          curl -X POST https://oss-wishlist.com/api/webhook/cache-refresh \
+            -H "x-webhook-secret: ${{ secrets.WEBHOOK_SECRET }}" \
+            -H "Content-Type: application/json"
+          continue-on-error: true
