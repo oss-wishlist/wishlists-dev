@@ -58,53 +58,6 @@ function generateWishlistId(repositoryUrl, issueNumber) {
 }
 
 /**
- * Get the latest form data from bot comments or issue body
- */
-async function getLatestFormData(issue) {
-  try {
-    // Fetch all comments for this issue
-    const allComments = [];
-    
-    const iterator = octokit.paginate.iterator(
-      "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
-      {
-        owner: "oss-wishlist",
-        repo: "wishlists",
-        issue_number: issue.number,
-        per_page: 100,
-      }
-    );
-
-    for await (const { data } of iterator) {
-      allComments.push(...data);
-    }
-
-    // Filter for bot comments only
-    const botComments = allComments.filter(
-      (comment) => comment.user?.login === "oss-wishlist-bot"
-    );
-
-    // Find latest comment with form data (contains ### sections)
-    const latestBotComment = [...botComments]
-      .reverse()
-      .find((comment) => comment.body?.includes("###"));
-
-    if (latestBotComment?.body) {
-      return latestBotComment.body;
-    }
-
-    // Fallback: use issue body (creation data)
-    return issue.body || "";
-  } catch (error) {
-    console.warn(
-      `Error fetching comments for issue ${issue.number}:`,
-      error.message
-    );
-    return issue.body || "";
-  }
-}
-
-/**
  * Extract fulfillment URL from issue body
  * Format: "Fulfill this wishlist: {URL}"
  */
@@ -195,39 +148,6 @@ async function parseWishlistIssue(issue, labels) {
     fulfillmentUrl,
     issueNumber: issue.number,
     updatedAt,
-  };
-}
-
-/**
- * Parse a wishlist issue into simplified format
- */
-async function parseWishlistIssue(issue, labels) {
-  const isApproved = labels.some((label) => label.name === "approved-wishlist");
-  
-  // Skip if not approved
-  if (!isApproved) {
-    return null;
-  }
-  
-  // Get form data: latest bot comment or issue body for edits
-  const body = await getLatestFormData(issue);
-
-  // Extract only the fields we need
-  const projectName = extractSection(body, "Project Name").trim();
-  const repositoryUrl = extractSection(body, "Project Repository").trim();
-  
-  // Generate unique ID based on repo name + issue number
-  const id = generateWishlistId(repositoryUrl, issue.number);
-  
-  // Extract fulfillment URL from body
-  const fulfillmentUrl = extractFulfillmentUrl(body, issue.number);
-
-  return {
-    id,
-    projectName: projectName || `Wishlist #${issue.number}`,
-    repositoryUrl,
-    fulfillmentUrl,
-    issueNumber: issue.number,
   };
 }
 
