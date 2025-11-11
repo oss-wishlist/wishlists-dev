@@ -33,7 +33,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch full history for rebasing
+          fetch-depth: 0
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -84,6 +84,9 @@ jobs:
             ISSUE_NUM="${{ github.event.issue.number }}"
             ISSUE_ACTION="${{ github.event.action }}"
             COMMIT_MSG="chore: update wishlist cache from issue #${ISSUE_NUM} (${ISSUE_ACTION})"
+          elif [ "${{ github.event_name }}" == "issue_comment" ]; then
+            ISSUE_NUM="${{ github.event.issue.number }}"
+            COMMIT_MSG="chore: update wishlist cache from bot comment on issue #${ISSUE_NUM}"
           else
             COMMIT_MSG="chore: update wishlist cache (manual trigger)"
           fi
