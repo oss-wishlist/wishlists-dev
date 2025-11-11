@@ -4,25 +4,32 @@
   "data_source": "GitHub Issues (oss-wishlist/wishlists)",
   "wishlists": [
     {
-      "id": 41,
-      "projectName": "Wishlist: Monday test",
-      "repositoryUrl": "",
-      "wishlistUrl": "/wishlist/41",
-      "maintainerUsername": "",
-      "maintainerAvatarUrl": "",
-      "approved": true,
+      "id": 42,
+      "projectName": "Monday Part two",
+      "repositoryUrl": "https://github.com/emmairwin/teach.webmaker.org",
+      "wishlistUrl": "/wishlist/42",
+      "maintainerUsername": "emmairwin",
+      "maintainerAvatarUrl": "https://github.com/emmairwin.png",
+      "approved": false,
       "status": "Open",
-      "created_at": "2025-11-11T03:10:00Z",
-      "updated_at": "2025-11-11T03:30:07Z",
-      "wishes": [],
+      "created_at": "2025-11-11T04:12:52Z",
+      "updated_at": "2025-11-11T04:12:52Z",
+      "wishes": [
+        "governance-setup"
+      ],
       "urgency": "medium",
-      "additionalNotes": "",
-      "technologies": [],
-      "openToSponsorship": false,
+      "projectSize": "medium",
+      "additionalNotes": "This repo is for tracking initiatives of the Mozilla Learning Networks team.\n\ntest one",
+      "technologies": [
+        "Pub (Dart/Flutter)"
+      ],
+      "openToSponsorship": true,
       "wantsFundingYml": false,
-      "resources": []
+      "resources": [
+        "hosting-infrastructure"
+      ]
     }
   ],
-  "lastUpdated": "2025-11-11T03:30:22.386Z",
+  "lastUpdated": "2025-11-11T04:17:57.388Z",
   "count": 1
 }
