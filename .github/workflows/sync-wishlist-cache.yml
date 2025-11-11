@@ -4,30 +4,26 @@ on:
   issues:
     types:
       - opened
-      - edited
       - deleted
       - reopened
       - labeled
       - unlabeled
+  issue_comment:
+    types:
+      - created
   workflow_dispatch:
 
 concurrency:
   group: sync-cache
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   sync-cache:
-    # Run if: body/title edited, labeled/unlabeled, or opened/deleted/reopened
+    # Only run on bot comments or issue events (not user comments)
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issues' && 
-       (github.event.action == 'opened' || 
-        github.event.action == 'deleted' || 
-        github.event.action == 'reopened' ||
-        github.event.action == 'labeled' ||
-        github.event.action == 'unlabeled' ||
-        (github.event.action == 'edited' && 
-         (github.event.changes.body.from != null || github.event.changes.title.from != null))))
+      github.event_name == 'issues' ||
+      (github.event_name == 'issue_comment' && github.event.comment.user.login == 'oss-wishlist-bot')
     runs-on: ubuntu-latest
     
     permissions:
