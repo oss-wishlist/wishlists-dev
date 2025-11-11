@@ -1,43 +1,44 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2025-11-11T19:26:03.755Z",
+  "generatedAt": "2025-11-11T19:31:22.333Z",
   "totalWishlists": 2,
   "approvedCount": 1,
   "pendingCount": 1,
   "ecosystemStats": {
-    "Go Modules (Go)": 1,
-    "Pub (Dart/Flutter)": 1
+    "Pub (Dart/Flutter)": 2
   },
   "serviceStats": {
-    "dependency": 1,
-    "developer": 2,
+    "developer": 1,
+    "funding": 1,
+    "governance": 1,
     "leadership": 1,
-    "maintainer": 2
+    "maintainer": 1
   },
   "wishlists": [
     {
       "id": 48,
-      "projectName": "Junie 2",
+      "projectName": "Junie 3",
       "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
       "maintainerUsername": "emmairwin",
       "maintainerAvatarUrl": "https://github.com/emmairwin.png",
       "approved": true,
       "wishes": [
-        "dependency",
-        "developer",
-        "maintainer"
+        "funding",
+        "governance"
       ],
       "technologies": [
-        "Go Modules (Go)"
+        "Pub (Dart/Flutter)"
       ],
-      "resources": [],
+      "resources": [
+        "hosting"
+      ],
       "urgency": "Medium",
       "projectSize": "Medium",
       "additionalNotes": "testing one two",
       "additionalContext": "testing one two",
       "status": "approved",
       "createdAt": "2025-11-11T17:00:56Z",
-      "updatedAt": "2025-11-11T19:09:56Z"
+      "updatedAt": "2025-11-11T19:31:05Z"
     },
     {
       "id": 47,
