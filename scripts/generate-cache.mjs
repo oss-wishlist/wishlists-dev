@@ -121,12 +121,8 @@ async function getLatestUpdateTimestamp(issue) {
  * Parse a wishlist issue into simplified format
  */
 async function parseWishlistIssue(issue, labels) {
+  // Check if approved (no longer filtering out non-approved)
   const isApproved = labels.some((label) => label.name === "approved-wishlist");
-  
-  // Skip if not approved
-  if (!isApproved) {
-    return null;
-  }
   
   // Debug: print the full issue body to see available sections
   console.log(`\n=== Issue #${issue.number} Body ===`);
@@ -166,6 +162,7 @@ async function parseWishlistIssue(issue, labels) {
     fulfillmentUrl,
     issueNumber: issue.number,
     updatedAt,
+    approved: isApproved, // True if has "approved-wishlist" label, false otherwise
   };
 }
 
