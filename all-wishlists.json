@@ -1,16 +1,6 @@
 {
   "version": "2.0.0",
-  "generatedAt": "2025-11-13T00:48:37.749Z",
-  "totalWishlists": 1,
-  "wishlists": [
-    {
-      "id": "new-repo-1-50",
-      "projectName": "Testing 2",
-      "repositoryUrl": "https://github.com/emmairwin/new-repo-1",
-      "fulfillmentUrl": "http://localhost:4324/oss-wishlist-website/fulfill?issue=50",
-      "issueNumber": 50,
-      "updatedAt": "2025-11-13T00:46:51Z",
-      "approved": true
-    }
-  ]
+  "generatedAt": "2025-11-13T03:55:41.574Z",
+  "totalWishlists": 0,
+  "wishlists": []
 }
